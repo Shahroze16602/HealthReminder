@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "687859826928",
+    "project_id": "health-reminder-e86fe",
+    "storage_bucket": "health-reminder-e86fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:687859826928:android:89af54aa92ca71034c0235",
+        "android_client_info": {
+          "package_name": "eu.smartpatient.mytherapy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "687859826928-h6qr3gmrfujoel60nkeludrjrj5bpfdh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_eDedRQG36v_Cm9wQqrHIrJvoIv3m4-Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "687859826928-6vvkpnbvh7q0r84tuelgusl94rp6l61s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
