@@ -1,5 +1,6 @@
 package eu.smartpatient.mytherapy.services;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -28,7 +29,6 @@ public class AlarmForegroundService extends Service {
 
     private static final int NOTIFICATION_ID = 99999;
     private static final String CHANNEL_ID = "ManagingReminder";
-    Notification notification;
     DatabaseHelper databaseHelper = new DatabaseHelper(this);
     ArrayList<MedicineModel> arrayList;
     AlarmManager alarmManager;
@@ -70,7 +70,6 @@ public class AlarmForegroundService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         stopAlarms();
         startAlarms();
-        Log.d("TAG", "onStartCommand: Foreground service is running...");
         return START_STICKY;
     }
 
@@ -79,6 +78,7 @@ public class AlarmForegroundService extends Service {
         return null;
     }
 
+    @SuppressLint("ScheduleExactAlarm")
     private void startAlarms() {
         arrayList = databaseHelper.getAllMedicines();
         for (MedicineModel reminder : arrayList) {

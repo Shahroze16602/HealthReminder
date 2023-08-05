@@ -55,8 +55,7 @@ public class UpdateMedicineActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.units, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         unitSpinner.setAdapter(adapter);
-        int position = adapter.getPosition(unit);
-        unitSpinner.setSelection(position);
+        unitSpinner.setSelection(adapter.getPosition(unit));
         unitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -96,7 +95,6 @@ public class UpdateMedicineActivity extends AppCompatActivity {
                     databaseHelper.updateMedicine(String.valueOf(id), medicineModel);
                     Intent serviceIntent = new Intent(UpdateMedicineActivity.this, AlarmForegroundService.class);
                     ContextCompat.startForegroundService(UpdateMedicineActivity.this, serviceIntent);
-                    Toast.makeText(UpdateMedicineActivity.this, "Reminder set successfully", Toast.LENGTH_SHORT).show();
                     onBackPressed();
                 } else {
                     Toast.makeText(UpdateMedicineActivity.this, "Name is required", Toast.LENGTH_SHORT).show();
