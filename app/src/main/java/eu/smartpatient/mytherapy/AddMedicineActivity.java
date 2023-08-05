@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +17,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+
+import java.text.ParseException;
+import java.util.Date;
+import java.util.Locale;
 
 import eu.smartpatient.mytherapy.database.DatabaseHelper;
 import eu.smartpatient.mytherapy.models.MedicineModel;
@@ -40,10 +45,9 @@ public class AddMedicineActivity extends AppCompatActivity {
         btnDose = findViewById(R.id.btn_dose);
         btnBack = findViewById(R.id.btn_back);
         btnSave = findViewById(R.id.btn_save);
-        if (minutes > 9)
-            btnTime.setText(hours + ":" + minutes);
-        else
-            btnTime.setText(hours + ":0" + minutes);
+        String time = (minutes > 9) ? hours + ":" + minutes : hours + ":0" + minutes;
+        time = convertTo12HourFormat(time);
+        btnTime.setText(time);
         btnDose.setText(noOfUnits + " " + unit);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.units, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -102,12 +106,11 @@ public class AddMedicineActivity extends AppCompatActivity {
             public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
                 AddMedicineActivity.this.hours = hours;
                 AddMedicineActivity.this.minutes = minutes;
-                if (minutes > 9)
-                    btnTime.setText(hours + ":" + minutes);
-                else
-                    btnTime.setText(hours + ":0" + minutes);
+                String time = (minutes > 9) ? hours + ":" + minutes : hours + ":0" + minutes;
+                time = convertTo12HourFormat(time);
+                btnTime.setText(time);
             }
-        }, hours, minutes, true);
+        }, hours, minutes, false);
         dialog.show();
     }
 
@@ -153,6 +156,22 @@ public class AddMedicineActivity extends AppCompatActivity {
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
+
+    }
+    private String convertTo12HourFormat(String time) {
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("HH:mm", Locale.US);
+            SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm a", Locale.US);
+
+            Date date = inputFormat.parse(time);
+            if (date != null) {
+                return outputFormat.format(date);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return time; // Return the original time if conversion fails
 
     }
 }

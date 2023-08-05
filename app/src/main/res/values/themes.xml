@@ -14,7 +14,7 @@
         <item name="colorSecondary">@color/blue</item>
         <item name="android:statusBarColor">#FFFBFE</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:textColorSecondaryInverse">@color/white</item>
+        <item name="android:textColorSecondaryInverse">#DADADA</item>
         <item name="android:textColorPrimaryInverse">@color/white</item>
     </style>
 </resources>

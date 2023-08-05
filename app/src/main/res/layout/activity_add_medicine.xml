@@ -83,14 +83,14 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_time"
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerInParent="true"
                 android:background="@drawable/button_border"
-                android:textSize="16sp"
-                android:text="8:00"
-                android:textColor="@color/blue" />
+                android:text="8:00 am"
+                android:textColor="@color/blue"
+                android:textSize="16sp" />
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
