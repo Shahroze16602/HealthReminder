@@ -51,7 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<MedicineModel> getAllMedicines(){
         SQLiteDatabase sqLiteDatabase=this.getReadableDatabase();
 
-        @SuppressLint("Recycle") Cursor cursor=sqLiteDatabase.query(MEDICINE_TABLE, med_col,null,null,null,null,null);
+        @SuppressLint("Recycle") Cursor cursor=sqLiteDatabase.query(MEDICINE_TABLE, med_col,null,null,null,null,"time_hours ASC, time_minutes ASC");
         ArrayList<MedicineModel> arrayList=new ArrayList<>();
         while (cursor.moveToNext()){
             MedicineModel medicineModel=new MedicineModel();
