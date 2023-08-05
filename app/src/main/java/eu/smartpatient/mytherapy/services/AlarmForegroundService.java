@@ -61,6 +61,7 @@ public class AlarmForegroundService extends Service {
                 .setContentText("Your reminders are being managed.")
                 .setSmallIcon(R.drawable.clock_icon)
                 .setContentIntent(pendingIntent)
+                .setSilent(true)
                 .build();
 
         startForeground(NOTIFICATION_ID, notification);
