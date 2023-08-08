@@ -3,6 +3,10 @@ package eu.smartpatient.mytherapy.fragments;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -130,6 +135,28 @@ public class MedicineFragment extends Fragment {
                             }
                         });
                 builder1.show();
+            }
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                View itemView = viewHolder.itemView;
+                int itemHeight = itemView.getHeight();
+                Drawable deleteButton = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_delete_outline_24);
+                assert deleteButton != null;
+                int deleteButtonMargin = (itemHeight - deleteButton.getIntrinsicHeight()) / 2;
+                int deleteButtonTop = itemView.getTop() + deleteButtonMargin;
+                int deleteButtonBottom = deleteButtonTop + deleteButton.getIntrinsicHeight();
+                int deleteButtonLeft = itemView.getLeft() + deleteButtonMargin / 2;
+                int deleteButtonRight = itemView.getLeft() + deleteButtonMargin / 2 + deleteButton.getIntrinsicWidth();
+                RectF background = new RectF(itemView.getLeft(), itemView.getTop() + 10, dX + 60, itemView.getBottom() - 10);
+                Paint paint = new Paint();
+                if (dX > 0) {
+                    paint.setColor(ContextCompat.getColor(itemView.getContext(), R.color.red));
+                    c.drawRect(background, paint);
+                    deleteButton.setBounds(deleteButtonLeft, deleteButtonTop, deleteButtonRight, deleteButtonBottom);
+                    deleteButton.draw(c);
+                }
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(deleteSwipe);
