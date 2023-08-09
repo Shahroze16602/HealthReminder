@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import eu.smartpatient.mytherapy.R;
 import eu.smartpatient.mytherapy.UpdateMedicineActivity;
@@ -34,6 +35,7 @@ import eu.smartpatient.mytherapy.adapters.MedicineAdapter;
 import eu.smartpatient.mytherapy.database.DatabaseHelper;
 import eu.smartpatient.mytherapy.models.MedicineModel;
 import eu.smartpatient.mytherapy.services.AlarmForegroundService;
+import eu.smartpatient.mytherapy.swipe.SwipeHelper;
 
 public class MedicineFragment extends Fragment {
     RecyclerView recyclerView;
@@ -86,80 +88,33 @@ public class MedicineFragment extends Fragment {
             }
         });
         recyclerView.setAdapter(adapter);
-
-        ItemTouchHelper.SimpleCallback deleteSwipe = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+        SwipeHelper swipeHelper = new SwipeHelper(requireContext(), recyclerView) {
             @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                int position = viewHolder.getAdapterPosition();
-                MedicineModel currentItem = arrayList.get(position);
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(requireContext())
-                        .setTitle("Delete Reminder")
-                        .setMessage("Are you sure you want to delete this reminder?")
-                        .setIcon(R.drawable.baseline_delete_24)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                arrayList.remove(position);
-                                if (arrayList.size() == 0) {
-                                    tvEmptyHeading = view.findViewById(R.id.tv_empty_heading);
-                                    tvEmptyHeading.setVisibility(View.VISIBLE);
-                                    tvEmptyText = view.findViewById(R.id.tv_empty_text);
-                                    tvEmptyText.setVisibility(View.VISIBLE);
-                                }
-                                database.deleteMedicine(currentItem.getId());
-                                TodayFragment todayFragment = (TodayFragment) getParentFragmentManager().getFragments().get(1);
-                                if (todayFragment != null)
-                                    todayFragment.notifyDeletion(position);
-                                else
-                                    Toast.makeText(getContext(), "NULL", Toast.LENGTH_SHORT).show();
-                                Intent serviceIntent = new Intent(getContext(), AlarmForegroundService.class);
-                                ContextCompat.startForegroundService(getContext(), serviceIntent);
-                                adapter.notifyItemRemoved(position);
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                adapter.notifyDataSetChanged();
-                            }
-                        })
-                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialogInterface) {
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-                builder1.show();
-            }
-
-            @Override
-            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-                View itemView = viewHolder.itemView;
-                int itemHeight = itemView.getHeight();
-                Drawable deleteButton = ContextCompat.getDrawable(requireContext(), R.drawable.baseline_delete_outline_24);
-                assert deleteButton != null;
-                int deleteButtonMargin = (itemHeight - deleteButton.getIntrinsicHeight()) / 2;
-                int deleteButtonTop = itemView.getTop() + deleteButtonMargin;
-                int deleteButtonBottom = deleteButtonTop + deleteButton.getIntrinsicHeight();
-                int deleteButtonLeft = itemView.getLeft() + deleteButtonMargin / 2;
-                int deleteButtonRight = itemView.getLeft() + deleteButtonMargin / 2 + deleteButton.getIntrinsicWidth();
-                RectF background = new RectF(itemView.getLeft(), itemView.getTop() + 10, dX + 60, itemView.getBottom() - 10);
-                Paint paint = new Paint();
-                if (dX > 0) {
-                    paint.setColor(ContextCompat.getColor(itemView.getContext(), R.color.red));
-                    c.drawRect(background, paint);
-                    deleteButton.setBounds(deleteButtonLeft, deleteButtonTop, deleteButtonRight, deleteButtonBottom);
-                    deleteButton.draw(c);
-                }
+            public void instantiateUnderlayButton(RecyclerView.ViewHolder viewHolder, List<UnderlayButton> underlayButtons) {
+                underlayButtons.add(new UnderlayButton(R.drawable.baseline_delete_outline_24, R.color.red, new UnderlayButtonClickListener() {
+                    @Override
+                    public void onClick(int pos) {
+                        int position = viewHolder.getAdapterPosition();
+                        MedicineModel currentItem = arrayList.get(position);
+                        arrayList.remove(position);
+                        if (arrayList.size() == 0) {
+                            tvEmptyHeading = view.findViewById(R.id.tv_empty_heading);
+                            tvEmptyHeading.setVisibility(View.VISIBLE);
+                            tvEmptyText = view.findViewById(R.id.tv_empty_text);
+                            tvEmptyText.setVisibility(View.VISIBLE);
+                        }
+                        database.deleteMedicine(currentItem.getId());
+                        TodayFragment todayFragment = (TodayFragment) getParentFragmentManager().getFragments().get(1);
+                        if (todayFragment != null)
+                            todayFragment.notifyDeletion(position);
+                        else
+                            Toast.makeText(getContext(), "NULL", Toast.LENGTH_SHORT).show();
+                        Intent serviceIntent = new Intent(getContext(), AlarmForegroundService.class);
+                        ContextCompat.startForegroundService(getContext(), serviceIntent);
+                        adapter.notifyItemRemoved(position);
+                    }
+                }));
             }
         };
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(deleteSwipe);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 }
