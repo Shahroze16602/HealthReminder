@@ -17,20 +17,20 @@ The Medication Manager App is a user-friendly Android application designed to he
 
 ## Screenshots
 
-![Screenshot 1](screenshots/reminders_page.jpg)
 *Screenshot 1: Medication List*
+![Screenshot 1](screenshots/reminders_page.jpg)
 
-![Screenshot 2](screenshots/today_page.jpg)
 *Screenshot 2: Reminders List*
+![Screenshot 2](screenshots/today_page.jpg)
 
-![Screenshot 3](screenshots/login_page.jpg)
 *Screenshot 3: Login Page*
+![Screenshot 3](screenshots/login_page.jpg)
 
-![Screenshot 4](screenshots/add_reminders.jpg)
 *Screenshot 4: Add Medicine*
+![Screenshot 4](screenshots/add_reminders.jpg)
 
-![Screenshot 5](screenshots/edit_reminders.jpg)
 *Screenshot 5: Edit Medicine*
+![Screenshot 5](screenshots/edit_reminders.jpg)
 
 ## Installation
 
